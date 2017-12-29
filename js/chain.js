@@ -80,13 +80,17 @@ define(['lodash', 'srand'], function(_, srand) {
     constructor() {
       super();
       this.values = [srand({min:-100, max:100})]; //random starting number
-      this.dv = srand({min:-10, max:10}); //initial value for number increment
+      this.dv = srand({min:-20, max:20}); //initial value for number increment
       this.ddv = (srand()) ? srand({min:-5, max:5}) : 0; //value by which the increment changes each index (only used in 50% of all cases)
       this.alternate = (srand() === 1); //alternate signs each second index
 
-      if (this.dv < 0 || this.ddv < 0) {
-        // disable alternating signs for very complicated cases
-        this.alternate = false;
+
+      if ((this.dv < 0) ^ (this.ddv < 0)) {
+        // only allow alternation if the sign switch of dv won't be within the first 6 transtions
+        if (Math.abs(this.dv / this.ddv) < 6) {
+          // a sign switch makes the alternation very hard to figure out
+          this.alternate = false;  
+        }        
       }
 
       this.id = "add," + this.values[0] + "," + this.dv + "," + this.ddv + "," + this.alternate;
@@ -268,6 +272,36 @@ define(['lodash', 'srand'], function(_, srand) {
     }
   }
 
+  /** Implements an operation chain *x :x +x  or *x :x -x
+   */
+  class MulDivAddChain extends Chain {
+    constructor() {
+      super();
+
+      this.f = srand([2,5,10,20]);
+      this.values = [srand({min:1,max:10})*this.f];
+      this.subtract = (srand() === 1); //subtract instead of add
+
+      this.id = "muldivadd," + this.f + "," + this.values[0] + "," + this.subtract;
+    }
+
+    calc(index) {
+      var prev = this.get(index-1);
+      var ops = [_.divide, (this.subtract ? _.subtract : _.add), _.multiply];
+
+      return ops[(index-1)%ops.length](prev, this.f);
+    }
+
+    getOp(index) {
+      var ops = [':', (this.subtract ? '-' : '+'), '&middot;'];
+      return ops[index%ops.length] + this.f;
+    }
+
+    hint() {
+      return this.id
+    }
+  }
+
 
 
 
@@ -280,7 +314,8 @@ define(['lodash', 'srand'], function(_, srand) {
     AddPairChain,
     MultiplyChain,
     AddMulChain,
-    MulPairChain
+    MulPairChain,
+    MulDivAddChain,
   ];
 
   return module;

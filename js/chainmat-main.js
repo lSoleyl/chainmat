@@ -5,7 +5,8 @@ requirejs.config({
 
   paths: {
     'jquery':'jquery-2.1.4',
-    'bootstrap':'bootstrap.min'
+    'bootstrap':'bootstrap.min',
+    'lodash':'lodash.min'
   }
 });
 
