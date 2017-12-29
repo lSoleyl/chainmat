@@ -1,0 +1,12 @@
+@page {
+  size: A4;
+}
+
+.dont-print {
+  display:none;
+}
+
+
+.only-print {
+  display:block;
+}

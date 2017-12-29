@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/chainmat.css">
+    <link rel="stylesheet" href="./css/chainmat-print.css" media="print">
+    <script data-main="./js/chainmat-main.js" src="./js/require.js"></script>
+
+    <title>Zahlenreihen - Mathe Übungsaufgaben</title>
+  </head>
+  <body>
+    <div class="container">
+      <div id="content" class="hidden">
+
+        <!-- Header/Config -->
+        <div class="form-group form-inline">
+          <label>Seed</label>
+          <div class="input-group">
+            <div class="input-group-addon hoverGrey no-select dont-print" id="new-seed">Neu</div>
+            <input type="text" value="" class="form-control" id="seed">
+          </div>
+          <input type="button" class="btn btn-default dont-print" value="Aufgaben neu berechnen" id="recalc">
+        </div>
+
+
+        <!-- Actual content -->
+        <div class="page">
+          <h2>Aufgaben</h2>
+          <div class="tasks">
+            <!-- tasks are being generated here -->
+          </div>
+        </div>
+
+
+
+        <!-- solutions -->
+        <hr class="dont-print">
+        <div class="page">
+          <!-- header copy to map a solutions page to the corresponding task page -->
+          <div class="only-print">
+            <label>Seed</label>
+            <div id="seed-copy"></div>
+          </div>
+
+
+          <h2>Lösungen</h2>
+          <div class="solutions">
+            <!-- solutions are being generated here -->
+          </div>
+        </div>
+      </div> <!-- #content -->
+
+
+      <div id="loading">
+        <h1>Loading data...</h1>
+      </div>
+    </div>
+  </body>
+</html>

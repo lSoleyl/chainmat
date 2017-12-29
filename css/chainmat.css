@@ -1,0 +1,70 @@
+
+
+
+.task,.solution {
+  margin-bottom: 10px;
+  font-size: 14pt;
+}
+
+.taskNr {
+  /*margin-right: 10px;*/
+  float: left;
+  width: 3em;
+}
+
+.taskNr::after {
+  content: ')';
+}
+
+.op {
+  margin-left: 10px;
+  padding-bottom: 1px;
+  padding-right: 5px;
+  padding-left: 5px;
+  font-size: 8pt;
+  vertical-align: top;
+  border-bottom: 1px solid black;
+}
+
+.op2::before {
+  content: '\25ba'; 
+  margin-right: 10px;
+  color: black;
+  font-size: 10pt;
+  margin-left: -3px;
+}
+
+.hint {
+  float:right;
+  margin-left: 20px;
+  font-style: italic;
+  font-size: 8pt;
+  padding-top: 4pt; /* to center the text vertically */
+}
+
+.no-select {
+  -moz-user-select: none; 
+  -khtml-user-select: none; 
+  -webkit-user-select: none; 
+  -o-user-select: none; 
+}
+
+.hoverGrey {
+  background-color: #ffffff;
+}
+
+.hoverGrey:hover {
+  background-color: #e6e6e6;
+}
+
+.page {
+  page-break-after: always;
+}
+
+.hidden {
+  display:none;
+}
+
+.only-print {
+  display:none;
+}
