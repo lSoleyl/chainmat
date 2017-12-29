@@ -298,7 +298,8 @@ define(['lodash', 'srand'], function(_, srand) {
     }
 
     hint() {
-      return this.id
+      var self = this;
+      return "Die Operationen " + _.map([0,1,2], function(i) { return self.getOp(i); }).join(', ') + " werden in der Reihenfolge immer wieder wiederholt";
     }
   }
 
