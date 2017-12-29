@@ -26,6 +26,11 @@
   border-bottom: 1px solid black;
 }
 
+.op > sup {
+  top: 0em;
+  vertical-align: top;
+}
+
 .op2::before {
   content: '\25ba'; 
   margin-right: 10px;

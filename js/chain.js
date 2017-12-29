@@ -402,6 +402,27 @@ define(['lodash', 'srand'], function(_, srand) {
     }
   }
 
+  class SquareNumberChain extends Chain {
+    constructor() {
+      super();
+      this.startValue = srand({min:2, max:15});
+      this.values = [ this.calc(0) ];
+      this.id = "squares," + this.startValue;
+    }
+
+    calc(index, prev) {
+      return Math.pow(this.startValue+index, 2);
+    }
+
+    getOp(index) {
+      return "= " + (this.startValue+index+1) + "<sup>2</sup>";
+    }
+
+    hint() {
+      return "Quadratzahlen aufsteigend ab " + this.startValue;
+    }
+  }
+
 
 
 
@@ -420,6 +441,7 @@ define(['lodash', 'srand'], function(_, srand) {
     MulAddSubChain,
     PrimeFactorChain,
     FactorialChain,
+    SquareNumberChain,
   ];
 
   return module;
