@@ -1,9 +1,9 @@
 /** This module defines the chain classes
  */
 define(['lodash', 'srand'], function(_, srand) {
-  class ChainOperation {
-    apply(number, index) {}
-  }
+
+  //needed by some chains
+  var primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53];
 
 
   /** Each chain holds a list of already calculated values and an id, which has to be defined by the algorithm used
@@ -19,8 +19,11 @@ define(['lodash', 'srand'], function(_, srand) {
     }
 
     /** This abstract function needs to be implemented for get() to work correctly
+     * 
+     * @param index the index of the number to compute
+     * @param prev the previous value of the chain
      */
-    calc(index) {
+    calc(index, prev) {
       throw new Error("calc() not implemented!");
     }
 
@@ -28,7 +31,7 @@ define(['lodash', 'srand'], function(_, srand) {
      */
     get(index) {
       if (this.values[index] === undefined)
-        this.values[index] = this.calc(index);
+        this.values[index] = this.calc(index, this.get(index-1));
 
       return this.values[index];
     }
@@ -96,8 +99,7 @@ define(['lodash', 'srand'], function(_, srand) {
       this.id = "add," + this.values[0] + "," + this.dv + "," + this.ddv + "," + this.alternate;
     }
 
-    calc(index) {
-      var prev = this.get(index-1);
+    calc(index, prev) {
       var sign = 1;
       if (this.alternate && (index % 2) == 0)
         sign = -1;
@@ -118,7 +120,6 @@ define(['lodash', 'srand'], function(_, srand) {
   class AddPrimesChain extends Chain {
     constructor() {
       super();
-      this.primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53];
 
       this.values = [srand({min:-10, max:10})]; //start value for prime number addition
       this.alternate = (srand() === 1); //do we alternate signs after each number
@@ -128,9 +129,8 @@ define(['lodash', 'srand'], function(_, srand) {
       this.id = "primes," + this.values[0] + "," + this.alternate + "," + this.sign + "," + this.startIndex;
     }
 
-    calc(index) {
-      var prev = this.get(index-1);
-      var prime = this.primes[this.startIndex+index-1]; //the prime, we have to add
+    calc(index, prev) {
+      var prime = primes[this.startIndex+index-1]; //the prime, we have to add
 
       var sign = this.sign;
       if (this.alternate && (index % 2) == 0)
@@ -140,7 +140,7 @@ define(['lodash', 'srand'], function(_, srand) {
     }
 
     hint() {
-      var hint = "Primzahlen ab " + this.primes[this.startIndex] + " werden zur vorherigen Zahl " + (this.sign === 1 ? "addiert" : "subtrahiert");
+      var hint = "Primzahlen ab " + primes[this.startIndex] + " werden zur vorherigen Zahl " + (this.sign === 1 ? "addiert" : "subtrahiert");
       if (this.alternate)
         hint += " (Vorzeichen wechselt)";
       hint += ".";
@@ -162,8 +162,7 @@ define(['lodash', 'srand'], function(_, srand) {
       this.id = "addtuple," + JSON.stringify(this.numbers) + "," + this.values[0];
     }
 
-    calc(index) {
-      var prev = this.get(index-1);
+    calc(index, prev) {
       return prev + this.numbers[(index-1)%this.numbers.length];
     }
 
@@ -184,8 +183,7 @@ define(['lodash', 'srand'], function(_, srand) {
       this.id = "multiply," + this.values[0] + "," + this.factor + "," + this.alternate;
     }
 
-    calc(index) {
-      var prev = this.get(index-1);
+    calc(index, prev) {
       var f = this.factor;
       if (this.alternate && (index % 2 == 0))
         f *= -1;
@@ -220,9 +218,7 @@ define(['lodash', 'srand'], function(_, srand) {
       this.id = "addmul," + this.values[0] + "," + this.f + "," + this.ff + "," + this.alternate;
     }
 
-    calc(index) {
-      var prev = this.get(index-1);
-
+    calc(index, prev) {
       var f = this.f * Math.pow(this.ff, index-1)
       if (this.alternate && index%2 === 0)
         f *= -1;
@@ -255,9 +251,7 @@ define(['lodash', 'srand'], function(_, srand) {
       this.id = "mulpair," + JSON.stringify(this.factors) +"," + this.values[0];
     }
 
-    calc(index) {
-      var prev = this.get(index-1);
-
+    calc(index, prev) {
       var f = this.factors[(index-1)%this.factors.length];
       return prev * f;
     }
@@ -285,10 +279,8 @@ define(['lodash', 'srand'], function(_, srand) {
       this.id = "muldivadd," + this.f + "," + this.values[0] + "," + this.subtract;
     }
 
-    calc(index) {
-      var prev = this.get(index-1);
+    calc(index, prev) {
       var ops = [_.divide, (this.subtract ? _.subtract : _.add), _.multiply];
-
       return ops[(index-1)%ops.length](prev, this.f);
     }
 
@@ -300,6 +292,113 @@ define(['lodash', 'srand'], function(_, srand) {
     hint() {
       var self = this;
       return "Die Operationen " + _.map([0,1,2], function(i) { return self.getOp(i); }).join(', ') + " werden in der Reihenfolge immer wieder wiederholt";
+    }
+  }
+
+  /** This chain multiplies with a small number and then subtracts a large number
+   */
+  class MulSubChain extends Chain {
+    constructor() {
+      super();
+
+      this.f = srand({min:2, max:5});
+      this.sub = srand({min:6, max:20});
+      var minValue = ~~(this.sub/this.f);
+      this.values = [ srand({min:minValue, max: minValue+10}) ];
+
+      this.id = "mulsub," + this.f + "," + this.sub + "," + this.values[0];
+    }
+
+    calc(index, prev) {
+      if ((index)%2 == 1) { //multiply
+        return prev * this.f;
+      } else {
+        return prev - this.sub;
+      }
+    }
+
+    getOp(index) {
+      var ops = ['&middot;' + this.f, '-' + this.sub];
+      return ops[index%2];
+    }
+
+    hint() {
+      return "Die Operationen " + this.getOp(0) +  ", " + this.getOp(1) + " werden abwechselnd angewendet.";
+    }
+  }
+
+  /** Implements a difficult -a, *b, +c chain
+   */
+  class MulAddSubChain extends Chain {
+    constructor() {
+      super();
+
+      this.add = srand({min:1, max:10});
+      this.sub = srand({min:1, max:10});
+      this.f = srand({min:2, max:3});
+
+      this.values = [ srand({min:5, max: 10}) ];
+
+      this.id = "muladdsub," + this.add + "," + this.sub + "," + this.f + "," + this.values[0];
+    }
+
+    calc(index, prev) {
+      var ops = [_.curryRight(_.subtract)(this.sub), _.curry(_.multiply)(this.f), _.curry(_.add)(this.add)];
+      return ops[(index-1)%3](prev);
+    }
+
+    getOp(index) {
+      var ops = ['-' + this.sub, '&middot;' + this.f, '+' + this.add];
+      return ops[index%3];
+    }
+
+    hint() {
+      var self = this;
+      return "Die Operationen " + _.map([0,1,2], function(i) { return self.getOp(i); }).join(', ') + " werden in der Reihenfolge immer wieder wiederholt";
+    }
+  }
+
+  /** This class implements a multiplication with prime numbers... there is only one such chain
+   */
+  class PrimeFactorChain extends Chain {
+    constructor() {
+      super();
+      this.values = [1]; //we start with 1
+      this.id = 'mulprimes';
+    }
+
+    calc(index, prev) {
+      return prev*primes[index-1];
+    }
+
+    getOp(index) {
+      return '&middot;' + primes[index];
+    }
+
+    hint() {
+      return "Es werden nacheinander alle Primzahlen multipliziert."
+    }
+  }
+
+  /** This class implements another special chain (1*2*3*4*5*...)
+   */
+  class FactorialChain extends Chain {
+    constructor() {
+      super();
+      this.values = [1]; //we start with 1
+      this.id = "factorial";
+    }
+
+    calc(index, prev) {
+      return prev*(index+1);
+    }
+
+    getOp(index) {
+      return '&middot;' + (index+2);
+    }
+
+    hint() {
+      return "Es werden alle Zahlen aufsteigend multipliziert (Fakultät).";
     }
   }
 
@@ -317,6 +416,10 @@ define(['lodash', 'srand'], function(_, srand) {
     AddMulChain,
     MulPairChain,
     MulDivAddChain,
+    MulSubChain,
+    MulAddSubChain,
+    PrimeFactorChain,
+    FactorialChain,
   ];
 
   return module;
