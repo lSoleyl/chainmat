@@ -3,7 +3,7 @@
 define(['lodash', 'srand', 'chain'], function(_, srand, chain) {
 
   const chainTypes = chain.classes;
-  const chainLimit = 40;
+  const chainLimit = 25;
 
 
   var chains = [];
