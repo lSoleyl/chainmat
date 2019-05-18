@@ -3,7 +3,7 @@
 (function(data, seed) {
   //Recalculate the excercise data and redisplay it
   function reloadVariables() {
-    data.reload(parseInt($("#seed").val()));
+    data.reload(parseInt(seedStorage()));
 
 
     const CHAIN_LENGTH = 6;
@@ -42,10 +42,11 @@
 
   //Wait for document to be ready
   $(function() {
-    //Synchronize both seed values
-    $('#seed').change(function() {
-      $('#seed-copy').text($('#seed').val());
+    
+    var vm = new Vue({
+      el: '#content'
     });
+
 
     //Synchronize seed storage with input field
     $('#seed').val(seed() || (new Date()).getTime())
@@ -60,9 +61,7 @@
 
     //Set button handler for new seed
     $('#new-seed').click(function() {
-      $('#seed').val((new Date()).getTime())
-      $('#seed').change();
-      seed($('#seed').val())
+      //TODO: this should happen automatically as soon as the current seed value changes
       reloadVariables()
     })
 

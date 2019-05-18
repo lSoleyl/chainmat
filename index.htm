@@ -27,14 +27,7 @@
       <div id="content" class="hidden">
 
         <!-- Header/Config -->
-        <div class="form-group form-inline">
-          <label>Seed</label>
-          <div class="input-group">
-            <div class="input-group-addon hoverGrey no-select dont-print" id="new-seed">Neu</div>
-            <input type="text" value="" class="form-control" id="seed">
-          </div>
-          <input type="button" class="btn btn-default dont-print" value="Aufgaben neu berechnen" id="recalc">
-        </div>
+        <seed-storage></seed-storage>
 
 
         <!-- Actual content -->
@@ -51,10 +44,7 @@
         <hr class="dont-print">
         <div class="page">
           <!-- header copy to map a solutions page to the corresponding task page -->
-          <div class="only-print">
-            <label>Seed</label>
-            <div id="seed-copy"></div>
-          </div>
+          <seed-value></seed-value>
 
 
           <h2>Lösungen</h2>

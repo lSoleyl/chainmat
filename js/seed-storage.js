@@ -1,13 +1,55 @@
 // Function module to store and retrive the current seed
-window.seedStorage = function(value) {
-  if (value === undefined) { // Read access
-    var seedStr = _.find(document.cookie.split(';'), function(x) { return x.search("seed=") != -1 })
+(function() {
+  var storage = {
+    seed: null,
 
-    if (!seedStr)
-      return null
-    else 
-      return seedStr.substr("seed=".length)
+    update: function(value) {
+      document.cookie = 'seed=' + value
+      this.seed = value;
+    },
+
+    /** Sets a new Seed
+     */
+    newSeed: function() {
+      this.update((new Date()).getTime().toString());
+    }
+  };
+
+  var seedStr = _.find(document.cookie.split(';'), function(x) { return x.search("seed=") != -1 })
+  if (seedStr) {
+    storage.seed = seedStr.substr("seed=".length);
   } else {
-    document.cookie = 'seed=' + value
+    storage.newSeed();
   }
-};
+
+  window.seedStorage = function() {
+    // TODO: this should return the storage, not the seed value itself... for it to be reused within other components
+    return storage.seed;
+  };
+  
+  
+  // The seed display and change controls
+  Vue.component('seed-storage', {
+    data: function() { return storage; },
+    template: '<div class="form-group form-inline">' +
+                '<label>Seed</label> ' +
+                '<div class="input-group">' +
+                  '<div class="input-group-addon hoverGrey no-select dont-print" id="new-seed" v-on:click="newSeed()">Neu</div>' +
+                  '<input type="text" v-bind:value="seed" v-on:input="update($event.target.value)" class="form-control" id="seed">' +
+                '</div>' +
+                '<input type="button" class="btn btn-default dont-print" value="Aufgaben neu berechnen" id="recalc">' + //TODO: This button should trigger an event... Do we even need it?
+              '</div>',
+  });
+
+
+  // Used to repeat the seed on the print version of the solutions page
+  Vue.component('seed-value', {
+    data: function() { return storage; },
+    template: '<div class="only-print">' +
+                '<label>Seed</label>' +
+                '<div id="seed-copy">{{seed}}</div>' +
+              '</div>'
+  });
+
+})();
+
