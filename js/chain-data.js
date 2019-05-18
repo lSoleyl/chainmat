@@ -1,7 +1,7 @@
 /** This module generates the number chains and provides access to the currently generated chain list
+ *  The module is accessible through window.chainData
  */
-define(['lodash', 'srand', 'chain'], function(_, srand, chain) {
-
+(function() {
   const chainTypes = chain.classes;
   const chainLimit = 25;
 
@@ -34,5 +34,5 @@ define(['lodash', 'srand', 'chain'], function(_, srand, chain) {
 
 
 
-  return module;
-});
+  window.chainData = module;
+})();

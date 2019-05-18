@@ -1,5 +1,6 @@
-//random module for seeded random values. Module returns a function
-define([], function() {
+// random module for seeded random values.
+// accessible through window.srand(options)
+(function() {
   var helper = { //Helper object
     seed:0, //Initial seed
     // in order to work 'Math.seed' must NOT be undefined,
@@ -15,7 +16,9 @@ define([], function() {
     }
   }
 
-  return function(options) {
+  /** The actual srand() function
+   */
+  window.srand = function(options) {
     options = options || {}
     if (options.seed !== undefined) {
       helper.seed = options.seed
@@ -44,4 +47,4 @@ define([], function() {
     else
       return result
   }
-})
+})();

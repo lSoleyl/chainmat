@@ -1,18 +1,6 @@
-requirejs.config({
-  shim: {
-    bootstrap: {deps:['jquery']}
-  },
-
-  paths: {
-    'jquery':'jquery-2.1.4',
-    'bootstrap':'bootstrap.min',
-    'lodash':'lodash.min'
-  }
-});
-
 /** Main entry point for this application
  */
-require(['jquery', 'chain-data', 'seed-storage', 'bootstrap'], function($, data, seed){
+(function(data, seed) {
   //Recalculate the excercise data and redisplay it
   function reloadVariables() {
     data.reload(parseInt($("#seed").val()));
@@ -87,4 +75,4 @@ require(['jquery', 'chain-data', 'seed-storage', 'bootstrap'], function($, data,
     $('#content').removeClass('hidden')
     $('#loading').addClass('hidden')
   });
-});
+})(window.chainData, window.seedStorage);

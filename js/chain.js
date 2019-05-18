@@ -1,6 +1,7 @@
 /** This module defines the chain classes
+ *  The module is exported as window.chain
  */
-define(['lodash', 'srand'], function(_, srand) {
+(function() {
 
   //needed by some chains
   var primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53];
@@ -444,5 +445,5 @@ define(['lodash', 'srand'], function(_, srand) {
     SquareNumberChain,
   ];
 
-  return module;
-});
+  window.chain = module;
+})();
