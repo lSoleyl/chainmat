@@ -9,7 +9,7 @@
 
   /** This function will generate a new list of chains after initializing srand with the given seed
    */
-  module.generate = function(seed, chainLength) {
+  module.generate = function(seed) {
     srand({seed:seed});
 
     var chains = [];
@@ -19,9 +19,6 @@
       
       // Only enter new chain if the same chain isn't already included in this list
       if (!_.some(chains, function(chain) { return chain.id === newChain.id; })) {
-        if (chainLength !== undefined) {
-          newChain.setLength(chainLength);
-        }
         chains.push(newChain);
       }
     }

@@ -1,16 +1,18 @@
 /** Main entry point for this application
  */
 (function() {
+  // The amount of numbers in each chain (solution) to generate
   const CHAIN_LENGTH = 6;
 
   /** This component is used to generate the task list and displays the numbers for each generated chain
    */
   Vue.component('chain-tasks', {
     props:['chains'],
+    data: function() { return { chainLength: CHAIN_LENGTH-1 }; }, // The task chain length is one element shorter (the last one is to be guessed)
     template: '<div class="tasks">' +
                 '<div class="task" v-for="(chain,taskIndex) in chains">' +
                   '<span class="taskNr">{{taskIndex+1}}</span>' +
-                  '<span class="chain">{{chain.getAll().join(", ")}}</span>'+
+                  '<span class="chain">{{chain.getN(chainLength).join(", ")}}</span>'+
                 '</div>' + 
               '</div>'
 
@@ -35,7 +37,7 @@
     props: ['chain'],
     computed: {
       numbers: function() { 
-        return this.chain.getAll(); 
+        return this.chain.getN(CHAIN_LENGTH);  // The solution has one step more then the task
       }
     },
     template: '<span class="chain">' +

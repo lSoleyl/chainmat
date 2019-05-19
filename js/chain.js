@@ -37,17 +37,11 @@
 
       return this.values[index];
     }
- 
-    /** Sets the length of the chain to retrive via getAll()
-     */
-    setLength(n) {
-      this.length = n;
-    }
 
-    /** Returns the number of chain elements, which has previously been specified via setLength
+    /** Returns the first n chain elements
      */
-    getAll() {
-      return _.map(_.range(this.length-1), (i) => { return this.get(i); });
+    getN(n) {
+      return _.map(_.range(n), (i) => { return this.get(i); });
     }
 
     /** Retrieves the stringified operation, which will be applied to the number with the given index
