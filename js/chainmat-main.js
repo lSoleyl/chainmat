@@ -55,7 +55,7 @@
       data: window.seedStorage(), // The seed is the only real state of the application all other values are derived from this seed
       computed: {
         chains: function() {
-          return chainData.generate(parseInt(this.seed), CHAIN_LENGTH);
+          return chainData.generate(parseInt(this.seed) || 0, CHAIN_LENGTH);
         }
       }
     });
