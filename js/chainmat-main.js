@@ -26,7 +26,7 @@
                 '<div class="solution" v-for="(chain,taskIndex) in chains">' +
                   '<span class="taskNr">{{taskIndex+1}}</span>' +
                   '<chain-steps v-bind:chain="chain"></chain-steps>' +
-                  '<span class="hint">{{chain.hint()}}</span>' +
+                  '<span class="hint" v-html="chain.hint()"></span>' +
                 '</div>' +
               '</div>'
   });
