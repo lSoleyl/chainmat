@@ -31,10 +31,23 @@
     /** Retrieves the number for the given index and calculates it if necessary
      */
     get(index) {
-      if (this.values[index] === undefined)
+      if (this.values[index] === undefined) {
         this.values[index] = this.calc(index, this.get(index-1));
+      }
 
       return this.values[index];
+    }
+ 
+    /** Sets the length of the chain to retrive via getAll()
+     */
+    setLength(n) {
+      this.length = n;
+    }
+
+    /** Returns the number of chain elements, which has previously been specified via setLength
+     */
+    getAll() {
+      return _.map(_.range(this.length-1), (i) => { return this.get(i); });
     }
 
     /** Retrieves the stringified operation, which will be applied to the number with the given index

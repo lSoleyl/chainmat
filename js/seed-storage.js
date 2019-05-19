@@ -1,6 +1,6 @@
 // Function module to store and retrive the current seed
 (function() {
-  var storage = {
+  let storage = {
     seed: null,
 
     update: function(value) {
@@ -15,7 +15,7 @@
     }
   };
 
-  var seedStr = _.find(document.cookie.split(';'), function(x) { return x.search("seed=") != -1 })
+  let seedStr = _.find(document.cookie.split(';'), function(x) { return x.search("seed=") != -1 })
   if (seedStr) {
     storage.seed = seedStr.substr("seed=".length);
   } else {
@@ -23,8 +23,7 @@
   }
 
   window.seedStorage = function() {
-    // TODO: this should return the storage, not the seed value itself... for it to be reused within other components
-    return storage.seed;
+    return storage;
   };
   
   
