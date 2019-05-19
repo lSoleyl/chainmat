@@ -15,6 +15,7 @@
     }
   };
 
+  // Initialize the storage from a possibly set cookie
   let seedStr = _.find(document.cookie.split(';'), function(x) { return x.search("seed=") != -1 })
   if (seedStr) {
     storage.seed = seedStr.substr("seed=".length);
@@ -36,7 +37,6 @@
                   '<div class="input-group-addon hoverGrey no-select dont-print" id="new-seed" v-on:click="newSeed()">Neu</div>' +
                   '<input type="text" v-bind:value="seed" v-on:input="update($event.target.value)" class="form-control" id="seed">' +
                 '</div>' +
-                '<input type="button" class="btn btn-default dont-print" value="Aufgaben neu berechnen" id="recalc">' + //TODO: This button should trigger an event... Do we even need it?
               '</div>',
   });
 
@@ -51,4 +51,3 @@
   });
 
 })();
-

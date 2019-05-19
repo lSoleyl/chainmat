@@ -5,21 +5,6 @@
     <link rel="stylesheet" href="./css/chainmat.css">
     <link rel="stylesheet" href="./css/chainmat-print.css" media="print">
 
-
-    <!-- basic dependencies -->
-    <script src="./js/vue.js"></script>
-    <script src="./js/jquery-2.1.4.js"></script>
-    <script src="./js/bootstrap.min.js"></script>    
-    <script src="./js/lodash.min.js"></script>
-
-
-    <!-- my modules -->
-    <script src="./js/srand.js"></script>
-    <script src="./js/seed-storage.js"></script>
-    <script src="./js/chain.js"></script> <!-- rename to chain-classes -->
-    <script src="./js/chain-data.js"></script>
-    <script src="./js/chainmat-main.js"></script> <!-- main application logic -->
-
     <title>Zahlenreihen - Mathe Übungsaufgaben</title>
   </head>
   <body>
@@ -47,9 +32,8 @@
 
 
           <h2>Lösungen</h2>
-          <div class="solutions">
-            <!-- solutions are being generated here -->
-          </div>
+          <!-- solutions are being generated here -->
+          <chain-solutions v-bind:chains="chains"></chain-solutions>
         </div>
       </div> <!-- #content -->
 
@@ -59,4 +43,19 @@
       </div>
     </div>
   </body>
+
+
+  <!-- basic dependencies -->
+  <script src="./js/vue.js"></script>
+  <script src="./js/jquery-2.1.4.js"></script>
+  <script src="./js/bootstrap.min.js"></script>    
+  <script src="./js/lodash.min.js"></script>
+
+
+  <!-- my modules -->
+  <script src="./js/srand.js"></script>
+  <script src="./js/seed-storage.js"></script>
+  <script src="./js/chain.js"></script>
+  <script src="./js/chain-data.js"></script>
+  <script src="./js/chainmat-main.js"></script> <!-- main application logic -->
 </html>

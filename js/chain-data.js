@@ -5,9 +5,6 @@
   const chainTypes = chain.classes;
   const chainLimit = 25;
 
-
-  let chains = []; //TODO: remove this 
-
   let module = {};
 
   /** This function will generate a new list of chains after initializing srand with the given seed
@@ -31,19 +28,6 @@
 
     return chains;
   };
-
-  //TODO: remove this
-  module.reload = function(seed) {
-    chains = module.generate(seed);
-  }
-
-  //TODO: remove this
-  /** Returns the currently calculated chains
-   */
-  module.get = function() {
-    return chains;
-  };
-
 
 
   window.chainData = module;
